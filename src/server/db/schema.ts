@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
+  pgEnum,
   pgTableCreator,
   primaryKey,
   text,
@@ -40,7 +41,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   }),
 }));
 
-export const economies = createTable("economies", {
+export const economies = createTable("economy", {
   userId: varchar("userId", {
     length: 255,
   })
@@ -50,7 +51,7 @@ export const economies = createTable("economies", {
   fates: integer("fates").default(0),
 });
 
-export const progressions = createTable("progressions", {
+export const progressions = createTable("progression", {
   userId: varchar("userId", {
     length: 255,
   })
@@ -122,3 +123,79 @@ export const verificationTokens = createTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
+
+export const elementTypeEnum = pgEnum("element_type", [
+  "fire",
+  "water",
+  "earth",
+  "wind",
+  "light",
+  "dark",
+]);
+
+export const cards = createTable(
+  "card",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    stock: integer("stock").default(0),
+    element: elementTypeEnum("element_type").notNull(),
+  },
+  (card) => ({
+    nameIdx: index("card_name_idx").on(card.name),
+  }),
+);
+
+export const cardsBaseStats = createTable("card_base_stat", {
+  cardId: varchar("cardId", { length: 255 })
+    .notNull()
+    .references(() => cards.id),
+  hp: integer("hp").notNull(),
+  atk: integer("atk").notNull(),
+  def: integer("def").notNull(),
+  spd: integer("spd").notNull(),
+  mana: integer("mana").notNull(),
+});
+
+export const rarityTypeEnum = pgEnum("rarity_type", [
+  "D",
+  "C",
+  "B",
+  "A",
+  "S",
+  "SS",
+  "SSR",
+]);
+
+export const rarities = createTable("rarity", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: rarityTypeEnum("rarity_type").notNull(),
+  probability: integer("probability").notNull(),
+});
+
+export const rarityCards = createTable(
+  "rarity_card",
+  {
+    rarityId: varchar("rarityId", { length: 255 })
+      .notNull()
+      .references(() => rarities.id),
+    cardId: varchar("cardId", { length: 255 })
+      .notNull()
+      .references(() => cards.id),
+  },
+  (rc) => ({
+    compoundKey: primaryKey({
+      columns: [rc.rarityId, rc.cardId],
+    }),
+    rarityIdIdx: index("rarity_card_rarityId_idx").on(rc.rarityId),
+    cardIdIdx: index("rarity_card_cardId_idx").on(rc.cardId),
+  }),
+);
+
+export const cardRelations = relations(cards, ({ many, one }) => ({
+  baseStats: one(cardsBaseStats, {
+    fields: [cards.id],
+    references: [cardsBaseStats.cardId],
+  }),
+  rarityCards: many(rarityCards),
+}));
