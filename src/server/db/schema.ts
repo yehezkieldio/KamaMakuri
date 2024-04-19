@@ -428,7 +428,7 @@ export const wishRelations = relations(wishes, ({ many }) => ({
 }));
 
 export const wishHistories = createTable(
-  "wish_history",
+  "wishHistory",
   {
     id: varchar("id", { length: 255 }).notNull().primaryKey(),
     rarity: rarityTypeEnum("rarity_type").notNull(),
