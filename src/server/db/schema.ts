@@ -39,6 +39,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
     fields: [users.id],
     references: [progressions.userId],
   }),
+  userCards: many(userCards),
 }));
 
 export const economies = createTable("economy", {
@@ -192,10 +193,97 @@ export const rarityCards = createTable(
   }),
 );
 
+export const userCards = createTable(
+  "user_card",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    cardId: varchar("cardId", { length: 255 })
+      .notNull()
+      .references(() => cards.id),
+  },
+  (uc) => ({
+    userIdIdx: index("user_card_userId_idx").on(uc.userId),
+    cardIdIdx: index("user_card_cardId_idx").on(uc.cardId),
+  }),
+);
+
+export const rarityUserCards = createTable(
+  "rarity_user_card",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    quantity: integer("quantity").notNull(),
+    userCardId: varchar("userCardId", { length: 255 })
+      .notNull()
+      .references(() => userCards.id),
+    rarityId: varchar("rarityId", { length: 255 })
+      .notNull()
+      .references(() => rarities.id),
+  },
+  (ruc) => ({
+    userCardIdIdx: index("rarity_user_card_userCardId_idx").on(ruc.userCardId),
+    rarityIdIdx: index("rarity_user_card_rarityId_idx").on(ruc.rarityId),
+  }),
+);
+
+export const userCardStats = createTable(
+  "user_card_stat",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    userCardId: varchar("userCardId", { length: 255 })
+      .notNull()
+      .references(() => userCards.id),
+    level: integer("level").notNull(),
+    exp: integer("exp").notNull(),
+    hp: integer("hp").notNull(),
+    atk: integer("atk").notNull(),
+    def: integer("def").notNull(),
+    spd: integer("spd").notNull(),
+    mana: integer("mana").notNull(),
+    rarityId: varchar("rarityId", { length: 255 })
+      .notNull()
+      .references(() => rarities.id),
+  },
+  (ucs) => ({
+    userCardIdIdx: index("user_card_stat_userCardId_idx").on(ucs.userCardId),
+    rarityIdIdx: index("user_card_stat_rarityId_idx").on(ucs.rarityId),
+  }),
+);
+
+export const userCardsRelations = relations(userCards, ({ one }) => ({
+  user: one(users, { fields: [userCards.userId], references: [users.id] }),
+  card: one(cards, { fields: [userCards.cardId], references: [cards.id] }),
+  userCardStats: one(userCardStats, {
+    fields: [userCards.id],
+    references: [userCardStats.userCardId],
+  }),
+}));
+
+export const rarityUserCardRelations = relations(
+  rarityUserCards,
+  ({ one }) => ({
+    userCard: one(userCards, {
+      fields: [rarityUserCards.userCardId],
+      references: [userCards.id],
+    }),
+    rarity: one(rarities, {
+      fields: [rarityUserCards.rarityId],
+      references: [rarities.id],
+    }),
+    userCardStats: one(userCardStats, {
+      fields: [rarityUserCards.userCardId],
+      references: [userCardStats.userCardId],
+    }),
+  }),
+);
+
 export const cardRelations = relations(cards, ({ many, one }) => ({
   baseStats: one(cardsBaseStats, {
     fields: [cards.id],
     references: [cardsBaseStats.cardId],
   }),
   rarityCards: many(rarityCards),
+  userCards: many(userCards),
 }));
