@@ -1,7 +1,9 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   index,
   integer,
+  json,
   pgEnum,
   pgTableCreator,
   primaryKey,
@@ -40,6 +42,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
     references: [progressions.userId],
   }),
   userCards: many(userCards),
+  wishHistories: many(wishHistories),
 }));
 
 export const economies = createTable("economy", {
@@ -252,6 +255,56 @@ export const userCardStats = createTable(
   }),
 );
 
+export const wishes = createTable(
+  "wish",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    rarityWeight: json("rarity_weight").default({
+      D: 100,
+      C: 50,
+      B: 25,
+      A: 10,
+      S: 5,
+      SS: 2,
+      SSR: 1,
+    }),
+    cost: integer("cost").notNull(),
+  },
+  (wish) => ({
+    nameIdx: index("wish_name_idx").on(wish.name),
+  }),
+);
+
+export const wishHistories = createTable(
+  "wish_history",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    rarity: rarityTypeEnum("rarity_type").notNull(),
+    isSoftPity: boolean("isSoftPity").default(false),
+    isHardPity: boolean("isHardPity").default(false),
+    cardId: varchar("cardId", { length: 255 }).notNull(),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    wishId: varchar("wishId", { length: 255 })
+      .notNull()
+      .references(() => wishes.id),
+    createdAt: timestamp("createdAt", { mode: "date" }).default(
+      sql`CURRENT_TIMESTAMP`,
+    ),
+  },
+  (wh) => ({
+    userIdIdx: index("wish_history_userId_idx").on(wh.userId),
+    wishIdIdx: index("wish_history_wishId_idx").on(wh.wishId),
+  }),
+);
+
+export const wishesRelations = relations(wishes, ({ many }) => ({
+  cards: many(cards),
+  wishHistories: many(wishHistories),
+}));
+
 export const userCardsRelations = relations(userCards, ({ one }) => ({
   user: one(users, { fields: [userCards.userId], references: [users.id] }),
   card: one(cards, { fields: [userCards.cardId], references: [cards.id] }),
@@ -286,4 +339,6 @@ export const cardRelations = relations(cards, ({ many, one }) => ({
   }),
   rarityCards: many(rarityCards),
   userCards: many(userCards),
+  wishes: many(wishes),
+  wishHistories: many(wishHistories),
 }));
