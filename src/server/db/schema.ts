@@ -4,7 +4,6 @@ import {
   integer,
   pgTableCreator,
   primaryKey,
-  serial,
   text,
   timestamp,
   varchar,
@@ -19,25 +18,6 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const createTable = pgTableCreator((name) => `kama-makuri_${name}`);
 
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("createdById", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt"),
-  },
-  (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
-
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
@@ -48,9 +28,37 @@ export const users = createTable("user", {
   image: varchar("image", { length: 255 }),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   accounts: many(accounts),
+  economies: one(economies, {
+    fields: [users.id],
+    references: [economies.userId],
+  }),
+  progressions: one(progressions, {
+    fields: [users.id],
+    references: [progressions.userId],
+  }),
 }));
+
+export const economies = createTable("economies", {
+  userId: varchar("userId", {
+    length: 255,
+  })
+    .notNull()
+    .references(() => users.id),
+  crystals: integer("crystals").default(0),
+  fates: integer("fates").default(0),
+});
+
+export const progressions = createTable("progressions", {
+  userId: varchar("userId", {
+    length: 255,
+  })
+    .notNull()
+    .references(() => users.id),
+  level: integer("level").default(1),
+  exp: integer("exp").default(0),
+});
 
 export const accounts = createTable(
   "account",
@@ -76,7 +84,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -96,7 +104,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -112,5 +120,5 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
