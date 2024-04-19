@@ -255,6 +255,23 @@ export const userCardStats = createTable(
   }),
 );
 
+export const userCardDecks = createTable(
+  "user_card_deck",
+  {
+    id: varchar("id", { length: 255 }).notNull().primaryKey(),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    name: varchar("name", { length: 255 }).notNull(),
+    position: integer("position").notNull(),
+    rarityUserCardId: varchar("rarityUserCardId", { length: 255 }),
+  },
+  (ucd) => ({
+    userIdIdx: index("user_card_deck_userId_idx").on(ucd.userId),
+    nameIdx: index("user_card_deck_name_idx").on(ucd.name),
+  }),
+);
+
 export const wishes = createTable(
   "wish",
   {
@@ -328,6 +345,10 @@ export const rarityUserCardRelations = relations(
     userCardStats: one(userCardStats, {
       fields: [rarityUserCards.userCardId],
       references: [userCardStats.userCardId],
+    }),
+    userCardDecks: one(userCardDecks, {
+      fields: [rarityUserCards.id],
+      references: [userCardDecks.rarityUserCardId],
     }),
   }),
 );
