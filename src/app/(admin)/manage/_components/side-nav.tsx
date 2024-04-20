@@ -17,6 +17,16 @@ const navItems = [
         icon: Icons.users,
         href: "/manage/users",
     },
+    {
+        label: "Cards",
+        icon: Icons.cards,
+        href: "/manage/cards",
+    },
+    {
+        label: "Wishes",
+        icon: Icons.wishes,
+        href: "/manage/wishes",
+    },
 ];
 
 export function SideNav() {

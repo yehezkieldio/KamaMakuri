@@ -1,4 +1,4 @@
-import { type LucideProps, LogOut, SquareAsterisk, type LucideIcon, Home, User, Club } from "lucide-react";
+import { type LucideProps, LogOut, SquareAsterisk, Sparkle, type LucideIcon, Home, User, Club } from "lucide-react";
 
 export type Icon = LucideIcon;
 
@@ -7,6 +7,7 @@ export const Icons = {
     home: Home,
     users: User,
     cards: Club,
+    wishes: Sparkle,
     logout: LogOut,
     discord: (props: LucideProps) => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" {...props}>
