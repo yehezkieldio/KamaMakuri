@@ -19,10 +19,13 @@ export const createTable = pgTableCreator((name) => `kama-makuri_${name}`);
 /*                                    USER                                    */
 /* -------------------------------------------------------------------------- */
 
+export const roles = pgEnum("role", ["user", "admin"]);
+
 export const users = createTable("user", {
     id: varchar("id", { length: 255 }).notNull().primaryKey(),
     name: varchar("name", { length: 255 }),
     pity: integer("pity").default(0),
+    role: roles("role").default("user"),
     email: varchar("email", { length: 255 }).notNull(),
     emailVerified: timestamp("emailVerified", {
         mode: "date",
