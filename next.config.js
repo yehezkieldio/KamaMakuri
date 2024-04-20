@@ -7,11 +7,21 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
     eslint: {
-        ignoreDuringBuilds: true
+        ignoreDuringBuilds: true,
     },
     typescript: {
-        ignoreBuildErrors: true
-    }
+        ignoreBuildErrors: true,
+    },
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "cdn.discordapp.com",
+                port: "",
+                pathname: "/avatars/**",
+            },
+        ],
+    },
 };
 
 export default config;
