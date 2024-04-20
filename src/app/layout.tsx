@@ -1,10 +1,10 @@
 import "@/styles/globals.css";
 
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 
-const inter = Inter({
+const font = Plus_Jakarta_Sans({
     subsets: ["latin"],
     variable: "--font-sans",
 });
@@ -18,7 +18,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
-            <body className={`font-sans ${inter.variable}`}>
+            <body className={`dark min-h-screen bg-background font-sans antialiased ${font.variable}`}>
                 <TRPCReactProvider>{children}</TRPCReactProvider>
             </body>
         </html>
