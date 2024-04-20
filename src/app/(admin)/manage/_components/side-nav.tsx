@@ -27,7 +27,7 @@ export function SideNav() {
         <aside className="fixed inset-y-0 left-0 z-10 hidden w-16 flex-col border-r bg-muted/40 sm:flex">
             <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
                 <Link
-                    href="#"
+                    href="/"
                     className="group mb-4 flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
                 >
                     <Icons.logo className="h-4 w-4 transition-all group-hover:scale-110" />
