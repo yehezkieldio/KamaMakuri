@@ -35,7 +35,10 @@ export const economies = createTable(
     {
         userId: varchar("userId", { length: 255 })
             .notNull()
-            .references(() => users.id),
+            .references(() => users.id, {
+                onDelete: "cascade",
+                onUpdate: "cascade",
+            }),
         crystals: integer("crystals").default(0),
         fates: integer("fates").default(0),
     },
@@ -49,7 +52,10 @@ export const progressions = createTable(
     {
         userId: varchar("userId", { length: 255 })
             .notNull()
-            .references(() => users.id),
+            .references(() => users.id, {
+                onDelete: "cascade",
+                onUpdate: "cascade",
+            }),
         level: integer("level").default(1),
         exp: integer("exp").default(0),
     },

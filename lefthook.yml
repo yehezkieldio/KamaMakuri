@@ -1,4 +1,4 @@
 pre-commit:
-  commands:
-    check_staged:
-      run: bunx lint-staged --staged
+    commands:
+        check_staged:
+            run: bunx lint-staged
