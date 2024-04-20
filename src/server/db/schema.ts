@@ -152,6 +152,17 @@ export const verificationTokens = createTable(
 /*                                    CARD                                    */
 /* -------------------------------------------------------------------------- */
 
+export const cardSeries = createTable(
+    "cardSeries",
+    {
+        id: varchar("id", { length: 255 }).notNull().primaryKey(),
+        name: varchar("name", { length: 255 }).notNull(),
+    },
+    (series) => ({
+        nameIdx: index("card_series_name_idx").on(series.name),
+    })
+);
+
 export const elementTypeEnum = pgEnum("element_type", ["fire", "water", "earth", "wind", "light", "dark"]);
 
 // base standard un-owned cards
@@ -162,6 +173,9 @@ export const cards = createTable(
         name: varchar("name", { length: 255 }).notNull(),
         stock: integer("stock").default(0),
         element: elementTypeEnum("element").notNull(),
+        seriesId: varchar("seriesId", { length: 255 })
+            .notNull()
+            .references(() => cardSeries.id),
     },
     (card) => ({
         nameIdx: index("card_name_idx").on(card.name),
@@ -194,6 +208,10 @@ export const cardRelations = relations(cards, ({ one, many }) => ({
     userCards: many(userCards),
     wishes: many(wishHistories),
     wishHistories: many(wishHistories),
+    series: one(cardSeries, {
+        fields: [cards.seriesId],
+        references: [cardSeries.id],
+    }),
 }));
 
 /* -------------------------------------------------------------------------- */
