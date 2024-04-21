@@ -16,7 +16,7 @@ export default async function ManageRarities() {
                     <p className="text-sm text-muted-foreground">Manage the rarities of your cards.</p>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
-                    <Button size="sm" className="h-8 gap-1">
+                    <Button size="sm" className="h-8 gap-1 px-4">
                         <PlusCircleIcon className="h-3.5 w-3.5" />
                         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Rarity</span>
                     </Button>
