@@ -12,10 +12,6 @@ export default async function Manage() {
                     <CardTitle>Welcome back, {user?.name}.</CardTitle>
                     <CardDescription>Lorem ipsum dolor sit amet consectetur.</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum molestias facilis iure ab
-                    quaerat aspernatur eveniet esse. Eveniet!
-                </CardContent>
             </Card>
         </div>
     );

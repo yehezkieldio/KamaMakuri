@@ -1,6 +1,4 @@
-import { Avatar } from "@/app/(admin)/manage/_components/avatar";
-import { Breadcrumbs } from "@/app/(admin)/manage/_components/breadcrumbs";
-import { SideNav } from "@/app/(admin)/manage/_components/side-nav";
+import { VerticalNav } from "@/app/(admin)/manage/_components/vertical-nav";
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
 
@@ -13,9 +11,8 @@ export default async function ManageLayout({ children }: { children: React.React
     }
 
     return (
-        <div className="flex min-h-screen w-full flex-col">
-            <SideNav />
-            {children}
+        <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+            <VerticalNav session={session}>{children}</VerticalNav>
         </div>
     );
 }
