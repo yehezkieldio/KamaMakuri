@@ -232,7 +232,7 @@ export const rarityTypeEnum = pgEnum("rarity_type", ["D", "C", "B", "A", "S", "S
 
 export const rarities = createTable("rarity", {
     id: varchar("id", { length: 255 }).notNull().primaryKey(),
-    name: rarityTypeEnum("rarity_type").notNull(),
+    name: rarityTypeEnum("name").notNull(),
     probability: integer("probability").notNull(),
 });
 
