@@ -5,7 +5,8 @@ import DiscordProvider from "next-auth/providers/discord";
 
 import { env } from "@/env";
 import { db } from "@/server/db";
-import { createTable } from "@/server/db/schema";
+import { createTable, users } from "@/server/db/schema";
+import { eq } from "drizzle-orm";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -17,16 +18,15 @@ declare module "next-auth" {
     interface Session extends DefaultSession {
         user: {
             id: string;
-            pity: number;
-            // ...other properties
-            // role: UserRole;
+            uid: string;
+            role: string;
         } & DefaultSession["user"];
     }
 
-    // interface User {
-    //   // ...other properties
-    //   // role: UserRole;
-    // }
+    interface User {
+        uid: string;
+        role: string;
+    }
 }
 
 /**
@@ -36,13 +36,24 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
     callbacks: {
-        session: ({ session, user }) => ({
-            ...session,
-            user: {
-                ...session.user,
-                id: user.id,
-            },
-        }),
+        session: async ({ session, user }) => {
+            /**
+             * ? tRPC APIs seems to outright crash the app in here. As a workaround, we query the data directly from the database.
+             */
+            const me = await db.query.users.findFirst({
+                where: eq(users.id, user.id),
+            });
+
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: user.id,
+                    uid: me?.uid,
+                    role: me?.role,
+                },
+            };
+        },
     },
     adapter: DrizzleAdapter(db, createTable) as Adapter,
     providers: [
