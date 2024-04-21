@@ -1,4 +1,5 @@
 import { cardRouter } from "@/server/api/routers/card";
+import { rarityRouter } from "@/server/api/routers/rarity";
 import { userRouter } from "@/server/api/routers/user";
 import { wishRouter } from "@/server/api/routers/wish";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
@@ -9,6 +10,7 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+    rarity: rarityRouter,
     user: userRouter,
     card: cardRouter,
     wish: wishRouter,
