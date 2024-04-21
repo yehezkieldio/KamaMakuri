@@ -62,7 +62,7 @@ export function VerticalNav({ session, children }: VerticalNavProps) {
                                 <span className={cn(isActive("/manage/rarities") && "text-primary")}>Rarity</span>
                             </Link>
                             <Collapsible>
-                                <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 px-3 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-50">
+                                <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 px-3 text-sm font-medium text-gray-700 text-muted-foreground hover:bg-muted hover:text-primary">
                                     <div className="flex items-center gap-3">
                                         <Icons.cards className="h-4 w-4" />
                                         Card
