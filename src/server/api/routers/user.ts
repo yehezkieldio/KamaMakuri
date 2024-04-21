@@ -8,4 +8,14 @@ export const userRouter = createTRPCRouter({
             where: eq(users.id, ctx.session.user.id),
         });
     }),
+    all: protectedProcedure.query(({ ctx }) => {
+        return ctx.db.query.users.findMany({
+            columns: {
+                id: true,
+                uid: true,
+                name: true,
+                role: true,
+            },
+        });
+    }),
 });
