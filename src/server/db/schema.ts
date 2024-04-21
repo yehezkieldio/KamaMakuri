@@ -1,3 +1,4 @@
+import { generatePublicId } from "@/lib/utils";
 import { relations, sql } from "drizzle-orm";
 import {
     boolean,
@@ -21,17 +22,26 @@ export const createTable = pgTableCreator((name) => `kama-makuri_${name}`);
 
 export const roles = pgEnum("role", ["user", "admin"]);
 
-export const users = createTable("user", {
-    id: varchar("id", { length: 255 }).notNull().primaryKey(),
-    name: varchar("name", { length: 255 }),
-    pity: integer("pity").default(0),
-    role: roles("role").default("user"),
-    email: varchar("email", { length: 255 }).notNull(),
-    emailVerified: timestamp("emailVerified", {
-        mode: "date",
-    }).default(sql`CURRENT_TIMESTAMP`),
-    image: varchar("image", { length: 255 }),
-});
+export const users = createTable(
+    "user",
+    {
+        id: varchar("id", { length: 255 }).notNull().primaryKey(),
+        // public id for user
+        uid: varchar("uid", { length: 14 }).default(generatePublicId()),
+        name: varchar("name", { length: 255 }),
+        pity: integer("pity").default(0),
+        role: roles("role").default("user"),
+        email: varchar("email", { length: 255 }).notNull(),
+        emailVerified: timestamp("emailVerified", {
+            mode: "date",
+        }).default(sql`CURRENT_TIMESTAMP`),
+        image: varchar("image", { length: 255 }),
+    },
+    (user) => ({
+        uidIdx: index("user_uid_idx").on(user.uid),
+        emailIdx: index("user_email_idx").on(user.email),
+    })
+);
 
 export const economies = createTable(
     "economy",
