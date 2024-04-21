@@ -14,7 +14,7 @@ export default async function ManageWishes() {
                 <div className="ml-auto flex items-center gap-2">
                     <Button size="sm" className="h-8 gap-1">
                         <PlusCircle className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add User</span>
+                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Wish</span>
                     </Button>
                 </div>
             </div>
