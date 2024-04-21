@@ -25,7 +25,11 @@ export function Breadcrumbs() {
             } else if (part === "users") {
                 href = "/manage/users";
             }
-            label = label.charAt(0).toUpperCase() + label.slice(1);
+            label = label
+                .replace(/-/g, " ")
+                .split(" ")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
             return {
                 label,
                 href,
