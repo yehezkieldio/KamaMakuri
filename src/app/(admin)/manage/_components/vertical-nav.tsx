@@ -7,6 +7,7 @@ import Link from "next/link";
 import { HorizontalNav } from "@/app/(admin)/manage/_components/horizontal-nav";
 import type { Session } from "next-auth";
 import type { ReactNode } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const navItems = [
     {
@@ -23,6 +24,16 @@ const navItems = [
         label: "Cards",
         icon: Icons.cards,
         href: "/manage/cards",
+        nested: [
+            {
+                label: "Card Series",
+                href: "/manage/cards/series",
+            },
+            {
+                label: "Rarity",
+                href: "/manage/cards/rarity",
+            },
+        ],
     },
     {
         label: "Wishes",
@@ -51,20 +62,103 @@ export function VerticalNav({ session, children }: VerticalNavProps) {
                         </Link>
                     </div>
                     <div className="flex-1">
-                        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                            {navItems.map((item) => (
+                        <nav className="grid items-start space-y-2 px-2 text-sm font-medium lg:px-4">
+                            <Link
+                                href="/manage"
+                                className={cn(
+                                    "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                    isActive("/manage") && "bg-muted/60 text-primary"
+                                )}
+                            >
+                                <Icons.dashboard className="h-4 w-4" />
+                                <span className={cn(isActive("/manage") && "text-primary")}>Dashboard</span>
+                            </Link>
+                            <Link
+                                href="/manage/users"
+                                className={cn(
+                                    "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                    isActive("/manage/users") && "bg-muted/60 text-primary"
+                                )}
+                            >
+                                <Icons.users className="h-4 w-4" />
+                                <span className={cn(isActive("/manage/users") && "text-primary")}>User</span>
+                            </Link>
+                            <Link
+                                href="/manage/rarities"
+                                className={cn(
+                                    "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                    isActive("/manage/rarities") && "bg-muted/60 text-primary"
+                                )}
+                            >
+                                <Icons.rarities className="h-4 w-4" />
+                                <span className={cn(isActive("/manage/rarities") && "text-primary")}>Rarity</span>
+                            </Link>
+                            <Collapsible>
+                                <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md p-2 px-3 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-50">
+                                    <div className="flex items-center gap-3">
+                                        <Icons.cards className="h-4 w-4" />
+                                        Card
+                                    </div>
+                                    <Icons.arrow_down className="h-4 w-4 transition-transform" />
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="space-y-1 pl-6">
+                                    <Link
+                                        href="/manage/cards"
+                                        className={cn(
+                                            "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                            isActive("/manage/cards") && "bg-muted/60 text-primary"
+                                        )}
+                                    >
+                                        <span className={cn(isActive("/manage/cards") && "text-primary")}>Card</span>
+                                    </Link>
+                                    <Link
+                                        href="/manage/cards/series"
+                                        className={cn(
+                                            "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                            isActive("/manage/cards/series") && "bg-muted/60 text-primary"
+                                        )}
+                                    >
+                                        <span className={cn(isActive("/manage/cards/series") && "text-primary")}>
+                                            Card Series
+                                        </span>
+                                    </Link>
+                                    <Link
+                                        href="/manage/cards/rarity-card"
+                                        className={cn(
+                                            "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                            isActive("/manage/cards/rarity-card") && "bg-muted/60 text-primary"
+                                        )}
+                                    >
+                                        <span className={cn(isActive("/manage/cards/rarity-card") && "text-primary")}>
+                                            Rarity Card
+                                        </span>
+                                    </Link>
+                                </CollapsibleContent>
+                            </Collapsible>
+                            <Link
+                                href="/manage/wishes"
+                                className={cn(
+                                    "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                    isActive("/manage/wishes") && "bg-muted/60 text-primary"
+                                )}
+                            >
+                                <Icons.wishes className="h-4 w-4" />
+                                <span className={cn(isActive("/manage/wishes") && "text-primary")}>Wish</span>
+                            </Link>
+
+                            {/* {navItems.map((item) => (
                                 <Link
                                     key={item.label}
                                     href={item.href}
                                     className={cn(
-                                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                                        isActive(item.href) && "bg-muted text-primary"
+                                        "mt-1 flex items-center gap-3 rounded-lg p-2 px-3 text-muted-foreground transition-all hover:bg-muted hover:text-primary",
+                                        isActive(item.href) && "bg-muted/60 text-primary"
                                     )}
                                 >
-                                    <item.icon className="h-5 w-5" />
+                                    <item.icon className="h-4 w-4" />
                                     <span className={cn(isActive(item.href) && "text-primary")}>{item.label}</span>
                                 </Link>
-                            ))}
+                            ))} */}
                         </nav>
                     </div>
                 </div>

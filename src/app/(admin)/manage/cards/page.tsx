@@ -1,15 +1,11 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getServerAuthSession } from "@/server/auth";
 
-export default async function Manage() {
-    const session = await getServerAuthSession();
-    const user = session?.user;
-
+export default async function ManageCards() {
     return (
         <div>
             <Card className="bg-muted/40">
                 <CardHeader>
-                    <CardTitle>Welcome back, {user?.name}.</CardTitle>
+                    <CardTitle>Cards</CardTitle>
                     <CardDescription>Lorem ipsum dolor sit amet consectetur.</CardDescription>
                 </CardHeader>
             </Card>

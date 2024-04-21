@@ -1,14 +1,29 @@
-import { type LucideProps, LogOut, SquareAsterisk, Sparkle, type LucideIcon, Home, User, Club } from "lucide-react";
+import {
+    type LucideProps,
+    type LucideIcon,
+    LayoutGridIcon,
+    WalletCardsIcon,
+    SquareAsteriskIcon,
+    HomeIcon,
+    UserIcon,
+    SparkleIcon,
+    GemIcon,
+    LogOutIcon,
+    ChevronDownIcon,
+} from "lucide-react";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
-    logo: SquareAsterisk,
-    home: Home,
-    users: User,
-    cards: Club,
-    wishes: Sparkle,
-    logout: LogOut,
+    logo: SquareAsteriskIcon,
+    dashboard: LayoutGridIcon,
+    home: HomeIcon,
+    users: UserIcon,
+    rarities: GemIcon,
+    cards: WalletCardsIcon,
+    wishes: SparkleIcon,
+    logout: LogOutIcon,
+    arrow_down: ChevronDownIcon,
     discord: (props: LucideProps) => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" {...props}>
             <path
