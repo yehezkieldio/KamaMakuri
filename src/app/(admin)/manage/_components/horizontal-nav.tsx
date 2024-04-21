@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 
 interface HorizontalNavProps {
-    session: Session;
+    session: Session | null;
 }
 
 export function HorizontalNav({ session }: HorizontalNavProps) {

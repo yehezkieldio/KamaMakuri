@@ -15,11 +15,11 @@ import Image from "next/image";
 import React from "react";
 
 interface AvatarProps {
-    session: Session;
+    session: Session | null;
 }
 
 export function Avatar({ session }: AvatarProps) {
-    const avatarUrl: string = session.user?.image ?? "/avatar-placeholder.svg";
+    const avatarUrl: string = session?.user?.image ?? "/avatar-placeholder.svg";
 
     return (
         <DropdownMenu>
@@ -35,7 +35,7 @@ export function Avatar({ session }: AvatarProps) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{session.user?.name ?? "User"}</DropdownMenuLabel>
+                <DropdownMenuLabel>{session?.user?.name ?? "User"}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
