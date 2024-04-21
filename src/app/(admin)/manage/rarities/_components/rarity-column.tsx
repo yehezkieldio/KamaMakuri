@@ -18,7 +18,7 @@ export type Rarity = {
     probability: number | null;
 };
 
-export const cardColumns: ColumnDef<Rarity>[] = [
+export const rarityColumns: ColumnDef<Rarity>[] = [
     {
         accessorKey: "name",
         header: "Name",
