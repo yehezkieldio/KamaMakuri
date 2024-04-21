@@ -1,7 +1,7 @@
 import { rarityColumns } from "@/app/(admin)/manage/rarities/_components/rarity-column";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { api } from "@/trpc/server";
 import { PlusCircleIcon } from "lucide-react";
 
@@ -10,7 +10,11 @@ export default async function ManageRarities() {
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center">
+            <div className="flex items-center pb-2">
+                <div>
+                    <h1 className="text-2xl font-bold">Rarities</h1>
+                    <p className="text-sm text-muted-foreground">Manage the rarities of your cards.</p>
+                </div>
                 <div className="ml-auto flex items-center gap-2">
                     <Button size="sm" className="h-8 gap-1">
                         <PlusCircleIcon className="h-3.5 w-3.5" />
@@ -18,14 +22,10 @@ export default async function ManageRarities() {
                     </Button>
                 </div>
             </div>
-            <Card className="bg-muted/40">
-                <CardHeader>
-                    <CardTitle>Rarities</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <DataTable columns={rarityColumns} data={rarities} />
-                </CardContent>
-            </Card>
+            <Separator />
+            <div className="pt-8">
+                <DataTable columns={rarityColumns} data={rarities} />
+            </div>
         </div>
     );
 }
