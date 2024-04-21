@@ -1,4 +1,6 @@
+import { cardRouter } from "@/server/api/routers/card";
 import { userRouter } from "@/server/api/routers/user";
+import { wishRouter } from "@/server/api/routers/wish";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -8,6 +10,8 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
     user: userRouter,
+    card: cardRouter,
+    wish: wishRouter,
 });
 
 // export type definition of API
