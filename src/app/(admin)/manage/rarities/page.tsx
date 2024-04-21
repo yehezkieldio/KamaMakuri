@@ -13,7 +13,7 @@ export default async function ManageRarities() {
         <div className="space-y-4">
             <div className="flex items-center pb-2">
                 <div>
-                    <h1 className="text-2xl font-bold">Rarities</h1>
+                    <h1 className="text-xl font-bold lg:text-2xl">Rarities</h1>
                     <p className="text-sm text-muted-foreground">Manage the rarities of your cards.</p>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
