@@ -1,3 +1,4 @@
+import { RarityForm } from "@/app/(admin)/manage/rarities/new/_rarity-form";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,7 @@ export default async function NewRarity() {
             </div>
             <Separator />
             <div className="pt-8">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <RarityForm />
             </div>
         </div>
     );
