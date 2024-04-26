@@ -6,7 +6,7 @@ export default async function Manage() {
     const user = session?.user;
 
     return (
-        <div>
+        <div className="space-y-8">
             <Card className="bg-muted/40">
                 <CardHeader>
                     <CardTitle>Welcome back, {user?.name}.</CardTitle>
