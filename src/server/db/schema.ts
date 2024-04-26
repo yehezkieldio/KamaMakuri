@@ -228,7 +228,8 @@ export const cardRelations = relations(cards, ({ one, many }) => ({
 /*                                   RARITY                                   */
 /* -------------------------------------------------------------------------- */
 
-export const rarityTypeEnum = pgEnum("rarity_type", ["D", "C", "B", "A", "S", "SS", "SSR"]);
+export const raritiesEnum = ["D", "C", "B", "A", "S", "SS", "SSR"] as const;
+export const rarityTypeEnum = pgEnum("rarity_type", raritiesEnum);
 
 export const rarities = createTable("rarity", {
     id: varchar("id", { length: 255 }).notNull().primaryKey(),
