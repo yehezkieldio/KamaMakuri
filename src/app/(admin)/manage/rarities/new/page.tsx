@@ -2,10 +2,13 @@ import { RarityForm } from "@/app/(admin)/manage/rarities/new/_rarity-form";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { api } from "@/trpc/server";
 import { CircleArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function NewRarity() {
+    const rarities = await api.rarity.all();
+
     return (
         <div className="space-y-4">
             <div className="flex items-center pb-2">
@@ -25,7 +28,7 @@ export default async function NewRarity() {
             </div>
             <Separator />
             <div className="pt-8">
-                <RarityForm />
+                <RarityForm rarities={rarities} />
             </div>
         </div>
     );

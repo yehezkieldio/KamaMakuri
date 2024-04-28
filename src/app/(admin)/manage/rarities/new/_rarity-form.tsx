@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { raritiesEnum } from "@/server/db/schema";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
     name: z.enum(raritiesEnum),
@@ -19,7 +20,20 @@ const formSchema = z.object({
     }),
 });
 
-export function RarityForm() {
+interface RarityFormProps {
+    rarities: {
+        id: string;
+        name: "D" | "C" | "B" | "A" | "S" | "SS" | "SSR";
+        probability: number;
+    }[];
+}
+
+function getRemainingRarities(rarities: RarityFormProps["rarities"]) {
+    const rarityNames = rarities.map((rarity) => rarity.name);
+    return raritiesEnum.filter((rarity) => !rarityNames.includes(rarity));
+}
+
+export function RarityForm({ rarities }: RarityFormProps) {
     const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -42,6 +56,8 @@ export function RarityForm() {
         });
     }
 
+    const remainingRarities = getRemainingRarities(rarities);
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -51,9 +67,24 @@ export function RarityForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input disabled={createRarity.isPending} placeholder="S" {...field} />
-                            </FormControl>
+                            <Select
+                                disabled={createRarity.isPending}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                            >
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a rarity type" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {remainingRarities.map((rarity) => (
+                                        <SelectItem key={rarity} value={rarity}>
+                                            {rarity}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <FormMessage />
                         </FormItem>
                     )}
