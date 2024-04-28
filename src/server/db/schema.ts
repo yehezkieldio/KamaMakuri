@@ -5,6 +5,7 @@ import {
     index,
     integer,
     json,
+    numeric,
     pgEnum,
     pgTableCreator,
     primaryKey,
@@ -234,7 +235,7 @@ export const rarityTypeEnum = pgEnum("rarity_type", raritiesEnum);
 export const rarities = createTable("rarity", {
     id: varchar("id", { length: 255 }).notNull().primaryKey(),
     name: rarityTypeEnum("name").notNull(),
-    probability: integer("probability").notNull(),
+    probability: numeric("probability").notNull(),
 });
 
 // attach rarities to cards

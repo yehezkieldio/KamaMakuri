@@ -10,7 +10,7 @@ export const rarityRouter = createTRPCRouter({
         .input(
             z.object({
                 name: z.enum(raritiesEnum),
-                probability: z.number().min(0).max(1),
+                probability: z.string(),
             })
         )
         .mutation(async ({ ctx, input }) => {

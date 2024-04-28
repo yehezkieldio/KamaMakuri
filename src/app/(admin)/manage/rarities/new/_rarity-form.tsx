@@ -10,22 +10,31 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
-import { raritiesEnum } from "@/server/db/schema";
+import { rarities, raritiesEnum } from "@/server/db/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
     name: z.enum(raritiesEnum),
-    probability: z.coerce.number().min(0, {
-        message: "Probability must be at least 0.",
-    }),
+    probability: z.coerce
+        .number()
+        .min(0, {
+            message: "Probability must be at least 0.",
+        })
+        .refine(
+            (value) => {
+                const parts = value.toString().split(".");
+                return !parts[1] || parts[1].length <= 2;
+            },
+            {
+                message: `Number must have a maximum of 2 decimal places`,
+            }
+        ),
 });
 
 interface RarityFormProps {
-    rarities: {
-        id: string;
-        name: "D" | "C" | "B" | "A" | "S" | "SS" | "SSR";
-        probability: number;
-    }[];
+    // Infer the type of the `rarities` prop from the server-side schema.
+    // re: https://orm.drizzle.team/docs/goodies
+    rarities: (typeof rarities.$inferSelect)[];
 }
 
 function getRemainingRarities(rarities: RarityFormProps["rarities"]) {
@@ -50,10 +59,20 @@ export function RarityForm({ rarities }: RarityFormProps) {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        createRarity.mutate({
-            name: values.name,
-            probability: values.probability,
-        });
+        createRarity.mutate(
+            {
+                name: values.name,
+                probability: values.probability.toString(),
+            },
+            {
+                onError: (error) => {
+                    form.setError("probability", {
+                        type: "manual",
+                        message: error.message,
+                    });
+                },
+            }
+        );
     }
 
     const remainingRarities = getRemainingRarities(rarities);
@@ -96,7 +115,14 @@ export function RarityForm({ rarities }: RarityFormProps) {
                         <FormItem>
                             <FormLabel>Probability</FormLabel>
                             <FormControl>
-                                <Input disabled={createRarity.isPending} type="number" placeholder="0.1" {...field} />
+                                <Input
+                                    disabled={createRarity.isPending}
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.1"
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
