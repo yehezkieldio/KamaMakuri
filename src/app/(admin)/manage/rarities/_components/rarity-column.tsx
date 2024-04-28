@@ -22,6 +22,8 @@ import {
 import type { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
+import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
 
 export type Rarity = {
     id: string;
@@ -41,8 +43,16 @@ export const rarityColumns: ColumnDef<Rarity>[] = [
     {
         id: "actions",
         header: "Actions",
-        cell: () => {
+        cell: ({ row }) => {
+            const rarity = row.original;
+            const router = useRouter();
             const [open, setOpen] = useState(false);
+
+            const deleteRarity = api.rarity.delete.useMutation({
+                onSuccess: () => {
+                    router.refresh();
+                },
+            });
 
             return (
                 <>
@@ -77,7 +87,13 @@ export const rarityColumns: ColumnDef<Rarity>[] = [
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction>Continue</AlertDialogAction>
+                                <AlertDialogAction
+                                    onClick={() => {
+                                        deleteRarity.mutate({ id: rarity.id });
+                                    }}
+                                >
+                                    Continue
+                                </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
