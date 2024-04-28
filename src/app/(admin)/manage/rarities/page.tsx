@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import { PlusCircleIcon } from "lucide-react";
+import Link from "next/link";
 
 export default async function ManageRarities() {
     const rarities = await api.rarity.all();
@@ -17,13 +18,13 @@ export default async function ManageRarities() {
                     <p className="text-sm text-muted-foreground">Manage the rarities of your cards.</p>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
-                    <a
+                    <Link
                         href="/manage/rarities/new"
                         className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "h-8 gap-1 px-4")}
                     >
                         <PlusCircleIcon className="h-3.5 w-3.5" />
                         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Add Rarity</span>
-                    </a>
+                    </Link>
                 </div>
             </div>
             <Separator />
