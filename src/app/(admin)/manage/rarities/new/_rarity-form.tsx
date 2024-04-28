@@ -12,6 +12,7 @@ import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { rarities, raritiesEnum } from "@/server/db/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { getRemainingRarities } from "@/lib/utils";
 
 const formSchema = z.object({
     name: z.enum(raritiesEnum),
@@ -35,11 +36,6 @@ interface RarityFormProps {
     // Infer the type of the `rarities` prop from the server-side schema.
     // re: https://orm.drizzle.team/docs/goodies
     rarities: (typeof rarities.$inferSelect)[];
-}
-
-function getRemainingRarities(rarities: RarityFormProps["rarities"]) {
-    const rarityNames = rarities.map((rarity) => rarity.name);
-    return raritiesEnum.filter((rarity) => !rarityNames.includes(rarity));
 }
 
 export function RarityForm({ rarities }: RarityFormProps) {

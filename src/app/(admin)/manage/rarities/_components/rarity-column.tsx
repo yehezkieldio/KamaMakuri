@@ -15,7 +15,7 @@ import { MoreHorizontal } from "lucide-react";
 export type Rarity = {
     id: string;
     name: string | null;
-    probability: number | null;
+    probability: string | null;
 };
 
 export const rarityColumns: ColumnDef<Rarity>[] = [

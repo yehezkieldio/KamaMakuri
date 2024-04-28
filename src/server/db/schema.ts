@@ -1,4 +1,4 @@
-import { generatePublicId } from "@/lib/utils";
+import { generatePublicId } from "@/lib/nanoid";
 import { relations, sql } from "drizzle-orm";
 import {
     boolean,
