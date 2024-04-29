@@ -51,7 +51,13 @@ export const RarityActionsColumn = ({ rarity }: RarityActionColumnProps) => {
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => {
+                            router.push(`/manage/rarities/edit/${rarity.id}`);
+                        }}
+                    >
+                        Edit
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => {
                             setOpen(true);

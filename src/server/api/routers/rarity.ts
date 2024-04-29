@@ -7,6 +7,15 @@ export const rarityRouter = createTRPCRouter({
     all: protectedProcedure.query(({ ctx }) => {
         return ctx.db.query.rarities.findMany();
     }),
+    one: protectedProcedure
+        .input(
+            z.object({
+                id: z.string(),
+            })
+        )
+        .query(async ({ ctx, input }) => {
+            return ctx.db.query.rarities.findFirst({ where: eq(rarities.id, input.id) });
+        }),
     create: protectedProcedure
         .input(
             z.object({
@@ -22,6 +31,21 @@ export const rarityRouter = createTRPCRouter({
                 name: rarityName,
                 probability: input.probability,
             });
+        }),
+    edit: protectedProcedure
+        .input(
+            z.object({
+                id: z.string(),
+                probability: z.string(),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            await ctx.db
+                .update(rarities)
+                .set({
+                    probability: input.probability,
+                })
+                .where(eq(rarities.id, input.id));
         }),
     delete: protectedProcedure
         .input(
